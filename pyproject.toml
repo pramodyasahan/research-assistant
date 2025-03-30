@@ -1,0 +1,18 @@
+[project]
+name = "app"
+version = "0.1.0"
+description = "Research Assistant"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi",
+    "pydantic>=2.0",
+    "httpx",
+    "qdrant-client",
+    "openai",
+    "beautifulsoup4",
+    "tiktoken",
+    "crewai",
+    "python-dotenv",
+    "uvicorn"
+]
