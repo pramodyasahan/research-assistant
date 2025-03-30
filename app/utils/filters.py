@@ -1,10 +1,19 @@
-EDUCATIONAL_TOPICS = [
-    "technology", "science", "engineering", "mathematics", "history",
-    "physiology", "innovation", "business", "economics", "current affairs", "politics"
-]
+from dotenv import load_dotenv
+import openai
 
-REJECTED_TOPICS = ["sports", "entertainment", "games", "violence", "celebrities", "movies"]
+load_dotenv()
 
-def is_educational(question: str) -> bool:
-    lower_q = question.lower()
-    return any(topic in lower_q for topic in EDUCATIONAL_TOPICS) and not any(bad in lower_q for bad in REJECTED_TOPICS)
+SYSTEM_PROMPT = "You are a strict classifier. Only accept questions related to education: technology, science, engineering, math, business, history, physiology, innovation, economics, politics, or current affairs. Reject all sports, games, movies, celebrities, violence, entertainment, or unrelated topics."
+
+
+def is_valid_question(question: str) -> bool:
+    response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": f"Classify this query: '{question}' as ACCEPT or REJECT."}
+        ],
+        temperature=0
+    )
+    decision = response.choices[0].message.content.lower()
+    return "accept" in decision
